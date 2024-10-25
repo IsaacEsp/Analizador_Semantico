@@ -1,0 +1,170 @@
+Gramática
+
+    0 $accept: prog $end
+
+    1 prog: stmts
+
+    2 stmts: /* vacío */
+    3      | stmt SEMICOLON stmts
+
+    4 stmt: STRING EQUAL STRING
+    5     | STRING EQUAL NUM
+    6     | NUM EQUAL STRING
+    7     | NUM EQUAL NUM
+    8     | OTHER
+
+
+Terminales con las reglas donde aparecen
+
+$end (0) 0
+error (256)
+STRING (258) 4 5 6
+NUM (259) 5 6 7
+OTHER (260) 8
+SEMICOLON (261) 3
+EQUAL (262) 4 5 6 7
+
+
+No terminales con las reglas donde aparecen
+
+$accept (8)
+    en la izquierda: 0
+prog (9)
+    en la izquierda: 1, en la derecha: 0
+stmts (10)
+    en la izquierda: 2 3, en la derecha: 1 3
+stmt (11)
+    en la izquierda: 4 5 6 7 8, en la derecha: 3
+
+
+estado 0
+
+    0 $accept: . prog $end
+
+    STRING  desplazar e ir al estado 1
+    NUM     desplazar e ir al estado 2
+    OTHER   desplazar e ir al estado 3
+
+    $default  reduce usando la regla 2 (stmts)
+
+    prog   ir al estado 4
+    stmts  ir al estado 5
+    stmt   ir al estado 6
+
+
+estado 1
+
+    4 stmt: STRING . EQUAL STRING
+    5     | STRING . EQUAL NUM
+
+    EQUAL  desplazar e ir al estado 7
+
+
+estado 2
+
+    6 stmt: NUM . EQUAL STRING
+    7     | NUM . EQUAL NUM
+
+    EQUAL  desplazar e ir al estado 8
+
+
+estado 3
+
+    8 stmt: OTHER .
+
+    $default  reduce usando la regla 8 (stmt)
+
+
+estado 4
+
+    0 $accept: prog . $end
+
+    $end  desplazar e ir al estado 9
+
+
+estado 5
+
+    1 prog: stmts .
+
+    $default  reduce usando la regla 1 (prog)
+
+
+estado 6
+
+    3 stmts: stmt . SEMICOLON stmts
+
+    SEMICOLON  desplazar e ir al estado 10
+
+
+estado 7
+
+    4 stmt: STRING EQUAL . STRING
+    5     | STRING EQUAL . NUM
+
+    STRING  desplazar e ir al estado 11
+    NUM     desplazar e ir al estado 12
+
+
+estado 8
+
+    6 stmt: NUM EQUAL . STRING
+    7     | NUM EQUAL . NUM
+
+    STRING  desplazar e ir al estado 13
+    NUM     desplazar e ir al estado 14
+
+
+estado 9
+
+    0 $accept: prog $end .
+
+    $default  aceptar
+
+
+estado 10
+
+    3 stmts: stmt SEMICOLON . stmts
+
+    STRING  desplazar e ir al estado 1
+    NUM     desplazar e ir al estado 2
+    OTHER   desplazar e ir al estado 3
+
+    $default  reduce usando la regla 2 (stmts)
+
+    stmts  ir al estado 15
+    stmt   ir al estado 6
+
+
+estado 11
+
+    4 stmt: STRING EQUAL STRING .
+
+    $default  reduce usando la regla 4 (stmt)
+
+
+estado 12
+
+    5 stmt: STRING EQUAL NUM .
+
+    $default  reduce usando la regla 5 (stmt)
+
+
+estado 13
+
+    6 stmt: NUM EQUAL STRING .
+
+    $default  reduce usando la regla 6 (stmt)
+
+
+estado 14
+
+    7 stmt: NUM EQUAL NUM .
+
+    $default  reduce usando la regla 7 (stmt)
+
+
+estado 15
+
+    3 stmts: stmt SEMICOLON stmts .
+
+    $default  reduce usando la regla 3 (stmts)
